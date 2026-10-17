@@ -2,17 +2,18 @@ import { useCallback } from "react"
 import type { Invoice } from "../types"
 import { useT } from "../i18n"
 import { CopyableText } from "./CopyableText"
+import { getExplorerTxBaseUrl } from "../utils/explorerUrl"
 
 interface PaymentReceiptProps {
   invoice: Invoice
   transactionHash: string
   /** Unix timestamp (seconds) when the payment was confirmed. */
   paidAt: number
-  /** Base URL for the block explorer — defaults to Stellar Expert testnet. */
+  /** Base URL for the block explorer — defaults to the explorer for the configured network. */
   explorerBaseUrl?: string
 }
 
-const DEFAULT_EXPLORER = "https://stellar.expert/explorer/testnet/tx"
+const DEFAULT_EXPLORER = getExplorerTxBaseUrl()
 
 export function PaymentReceipt({
   invoice,
