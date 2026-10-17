@@ -1,7 +1,8 @@
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import type { Invoice } from "../types"
 import { useT } from "../i18n"
 import { CopyableText } from "./CopyableText"
+import { emitPaymentCompleted } from "../utils/invoiceEvents"
 import { getExplorerTxBaseUrl } from "../utils/explorerUrl"
 
 interface PaymentReceiptProps {
@@ -22,6 +23,11 @@ export function PaymentReceipt({
   explorerBaseUrl = DEFAULT_EXPLORER,
 }: PaymentReceiptProps) {
   const t = useT()
+
+  // The receipt only renders after a confirmed payment; tell lists to refetch.
+  useEffect(() => {
+    emitPaymentCompleted(String(invoice.id))
+  }, [invoice.id, transactionHash])
 
   const explorerUrl = `${explorerBaseUrl}/${transactionHash}`
 
