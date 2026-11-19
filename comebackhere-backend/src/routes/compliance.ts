@@ -135,6 +135,9 @@ export async function callComplianceOp(
   prepared.sign(keypair)
 
   const sendResult = await client.sendTransaction(prepared)
+  if (!sendResult?.hash) {
+    throw Object.assign(new Error("Soroban submission returned no transaction hash"), { status: 502 })
+  }
   if (sendResult.status === "ERROR") {
     throw Object.assign(
       new Error(
